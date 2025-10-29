@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace EpubReader.Controller
 {
-    internal class FileController
+    public class FileController
     {
         private static ZipArchive UnzipFile(string filepath)
         {
@@ -61,6 +61,26 @@ namespace EpubReader.Controller
             return opfRoute;
         }
 
+        private static string ReadOpfFile(ZipArchiveEntry opfFile)
+        {
+            string opfContent = "";
+            try
+            {
+                using (Stream opfData = opfFile.Open())
+                {
+                    using (StreamReader reader = new StreamReader(opfData))
+                    {
+                        opfContent = reader.ReadToEnd();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            return opfContent;
+        }
+
         public static Book ObtainBookData(string bookPath)
         {
             Book book = new Book();
@@ -70,7 +90,7 @@ namespace EpubReader.Controller
                 ZipArchiveEntry metaFile = archive.GetEntry("META-INF/container.xml");
                 string opfRoute = new FileController().FindOpfRoute(metaFile);
                 ZipArchiveEntry opfFile = archive.GetEntry(opfRoute);
-
+                var a = ReadOpfFile(opfFile);
             }
             catch (Exception e)
             {

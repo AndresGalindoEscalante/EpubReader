@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EpubReader.Controller
 {
-    internal class BookController
+    public class BookController
     {
         public static void AddBook(Book book)
         {
