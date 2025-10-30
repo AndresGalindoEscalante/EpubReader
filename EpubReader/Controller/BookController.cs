@@ -16,16 +16,14 @@ namespace EpubReader.Controller
         {
             try
             {
-                string folderPath = ConfigurationManager.AppSettings["BookFolder"];
-                if (!Directory.Exists(folderPath))
+                string? folderPath = ConfigurationManager.AppSettings["BookFolder"];
+                if (folderPath != null && !Directory.Exists(folderPath))
                 {
                     Directory.CreateDirectory(folderPath);
                 }
-                using (var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db"))
-                {
-                    var books = db.GetCollection<Book>("books");
-                    books.Insert(book);
-                }
+                using var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db");
+                var books = db.GetCollection<Book>("books");
+                books.Insert(book);
             }
             catch (Exception ex)
             {
@@ -35,15 +33,13 @@ namespace EpubReader.Controller
 
         public static List<Book> GetBooks()
         {
-            List<Book> allBooks = null;
+            List<Book> allBooks = [];
             try
             {
-                string folderPath = ConfigurationManager.AppSettings["BookFolder"];
-                using (var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db"))
-                {
-                    var books = db.GetCollection<Book>("books");
-                    allBooks = books.FindAll().ToList();
-                }
+                string? folderPath = ConfigurationManager.AppSettings["BookFolder"];
+                using var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db");
+                var books = db.GetCollection<Book>("books");
+                allBooks = [.. books.FindAll()];
             }
             catch (Exception ex)
             {

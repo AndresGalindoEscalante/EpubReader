@@ -1,6 +1,6 @@
 ﻿namespace EpubReader
 {
-    partial class Form1
+    partial class MainPage
     {
         /// <summary>
         /// Variable del diseñador necesaria.
@@ -28,73 +28,84 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.AddBook = new System.Windows.Forms.Button();
-            this.booksTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.panel1.SuspendLayout();
-            this.SuspendLayout();
+            components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            AddBook = new Button();
+            panel1 = new Panel();
+            BooksBinding = new DataGridView();
+            bookControllerBindingSource = new BindingSource(components);
+            panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)BooksBinding).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)bookControllerBindingSource).BeginInit();
+            SuspendLayout();
             // 
             // AddBook
             // 
-            this.AddBook.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AddBook.Location = new System.Drawing.Point(12, 28);
-            this.AddBook.Name = "AddBook";
-            this.AddBook.Size = new System.Drawing.Size(269, 126);
-            this.AddBook.TabIndex = 0;
-            this.AddBook.Text = "Add books";
-            this.AddBook.UseVisualStyleBackColor = true;
-            this.AddBook.Click += new System.EventHandler(this.AddBookButton);
-            // 
-            // booksTablePanel
-            // 
-            this.booksTablePanel.AutoScroll = true;
-            this.booksTablePanel.AutoSize = true;
-            this.booksTablePanel.ColumnCount = 4;
-            this.booksTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.booksTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.booksTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.booksTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.booksTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.booksTablePanel.Location = new System.Drawing.Point(0, 0);
-            this.booksTablePanel.Name = "booksTablePanel";
-            this.booksTablePanel.RowCount = 1;
-            this.booksTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.booksTablePanel.Size = new System.Drawing.Size(1406, 587);
-            this.booksTablePanel.TabIndex = 2;
-            this.booksTablePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.BooksTablePanelPaint);
+            AddBook.Font = new Font("Microsoft Sans Serif", 7.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            AddBook.Location = new Point(-2, 13);
+            AddBook.Margin = new Padding(3, 4, 3, 4);
+            AddBook.Name = "AddBook";
+            AddBook.Size = new Size(291, 161);
+            AddBook.TabIndex = 0;
+            AddBook.Text = "Add books";
+            AddBook.UseVisualStyleBackColor = true;
+            AddBook.Click += AddBookButton;
             // 
             // panel1
             // 
-            this.panel1.AutoScroll = true;
-            this.panel1.AutoSize = true;
-            this.panel1.Controls.Add(this.booksTablePanel);
-            this.panel1.Location = new System.Drawing.Point(706, 106);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1406, 587);
-            this.panel1.TabIndex = 3;
+            panel1.AutoScroll = true;
+            panel1.AutoSize = true;
+            panel1.BackColor = SystemColors.Window;
+            panel1.Controls.Add(BooksBinding);
+            panel1.Location = new Point(334, 40);
+            panel1.Margin = new Padding(3, 4, 3, 4);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(2260, 976);
+            panel1.TabIndex = 3;
             // 
-            // Form1
+            // BooksBinding
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2907, 1157);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.AddBook);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            BooksBinding.BackgroundColor = SystemColors.Control;
+            BooksBinding.BorderStyle = BorderStyle.None;
+            BooksBinding.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            BooksBinding.Dock = DockStyle.Fill;
+            BooksBinding.Location = new Point(0, 0);
+            BooksBinding.Name = "BooksBinding";
+            BooksBinding.RowHeadersWidth = 82;
+            dataGridViewCellStyle1.BackColor = Color.White;
+            BooksBinding.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            BooksBinding.Size = new Size(2260, 976);
+            BooksBinding.TabIndex = 4;
+            // 
+            // bookControllerBindingSource
+            // 
+            bookControllerBindingSource.DataSource = typeof(Controller.BookController);
+            // 
+            // MainPage
+            // 
+            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(3149, 1481);
+            Controls.Add(panel1);
+            Controls.Add(AddBook);
+            Margin = new Padding(3, 4, 3, 4);
+            Name = "MainPage";
+            Text = "Form1";
+            Load += Form1_Load;
+            panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)BooksBinding).EndInit();
+            ((System.ComponentModel.ISupportInitialize)bookControllerBindingSource).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.Button AddBook;
-        private System.Windows.Forms.TableLayoutPanel booksTablePanel;
         private System.Windows.Forms.Panel panel1;
+        private BindingSource bookControllerBindingSource;
+        private DataGridView BooksBinding;
     }
 }
 
