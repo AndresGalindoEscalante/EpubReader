@@ -47,5 +47,26 @@ namespace EpubReader.Controller
             }
             return allBooks;
         }
+
+        public static bool DeleteBooks(int[] idBook)
+        {
+            bool res = false;
+            try
+            {
+                string? folderPath = ConfigurationManager.AppSettings["BookFolder"];
+                using var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db");
+                var books = db.GetCollection<Book>("books");
+                foreach (int id in idBook)
+                {
+                res = books.Delete(id);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return res;
+        }
     }
 }

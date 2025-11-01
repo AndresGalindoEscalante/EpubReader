@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -28,37 +29,37 @@ namespace EpubReader.Controller
             return archive;
         }
 
-        private static string? FindOpfRoute(ZipArchiveEntry metaFile)
+        private static string? FindPackageRoute(ZipArchiveEntry metaFile)
         {
-            string? opfRoute = null;
+            string? PackageRoute = null;
             try
             {
                 using Stream metaData = metaFile.Open();
                 XmlDocument xmlDoc = new();
                 xmlDoc.Load(metaData);
-                opfRoute = xmlDoc.SelectSingleNode("//@full-path")?.Value;
+                PackageRoute = xmlDoc.SelectSingleNode("//@full-path")?.Value;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            return opfRoute;
+            return PackageRoute;
         }
 
-        private static OpfFile? ReadOpfFile(ZipArchiveEntry opfFile)
+        private static PackageDocument? ReadPackageFile(ZipArchiveEntry opfFile)
         {
-            OpfFile? opfFileData = null;
+            PackageDocument? packageFileData = null;
             try
             {
-                using Stream opfData = opfFile.Open();
-                XmlSerializer serializer = new(typeof(OpfFile));
-                opfFileData = (OpfFile?)serializer?.Deserialize(opfData);
+                using Stream packageData = opfFile.Open();
+                XmlSerializer serializer = new(typeof(PackageDocument));
+                packageFileData = (PackageDocument?)serializer?.Deserialize(packageData);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            return opfFileData;
+            return packageFileData;
         }
 
         public static Book? ObtainBookData(string bookPath)
@@ -77,40 +78,73 @@ namespace EpubReader.Controller
                 return null;
             }
 
-            string? opfRoute = FindOpfRoute(metaFile);
-            if (opfRoute == null)
-            {                 
-                Console.WriteLine("Error finding opf file route");
+            string? packageRoute = FindPackageRoute(metaFile);
+            if (packageRoute == null)
+            {
+                Console.WriteLine("Error finding package file route");
                 return null;
             }
 
-            ZipArchiveEntry? opfArchive = archive?.GetEntry(opfRoute);
-            if (opfArchive == null)
+            ZipArchiveEntry? packageArchive = archive?.GetEntry(packageRoute);
+            if (packageArchive == null)
             {
-                Console.WriteLine("Error finding opf file in archive");
+                Console.WriteLine("Error finding package file in archive");
                 return null;
             }
 
-            OpfFile? opfFile = ReadOpfFile(opfArchive);
-            if (opfFile == null)
+            PackageDocument? packageFile = ReadPackageFile(packageArchive);
+            if (packageFile == null)
             {
-                Console.WriteLine("Error reading opf file");
+                Console.WriteLine("Error reading package file");
                 return null;
             }
+
+            if (ValidatePackage(packageFile) == false)
+            {
+                Console.WriteLine("Invalid package file");
+                return null;
+            }
+
+
+
             string filePathNew = $@"{ConfigurationManager.AppSettings["BookFolder"]}\{bookPath}";
-
             Book book = new()
             {
-                Name = opfFile.Metadata.Title != null ? opfFile.Metadata.Title.Value : "Unknown Title",
-                Author = opfFile.Metadata.Creator != null && opfFile.Metadata.Creator.Count > 0 ?
-                    string.Join(", ", opfFile.Metadata.Creator.Select(c => c.Value)) : "Unknown Author",
+                UniqueId = int.TryParse(packageFile.Metadata.Identifier.First().Value, out int id) ? id : 0,
+                Name = packageFile.Metadata.Title != null ? packageFile.Metadata.Title.Value : "Unknown Title",
+                Author = packageFile.Metadata?.Creator?.Count > 0 ?
+                    string.Join(", ", packageFile.Metadata.Creator.Select(c => c.Value)) : "Unknown Author",
                 DateAdded = DateTime.Now,
                 FilePath = filePathNew,
-                PublishDate = opfFile.Metadata.Date != null && opfFile.Metadata.Date.Count > 0 ? 
-                    DateTime.TryParse(opfFile.Metadata.Date[0].Value, out DateTime pubDate) ? pubDate : null : null
+                PublishDate = FindDate(packageFile) ?? "Unknown Publish Date"
             };
-
             return book;
+        }
+
+        private static string? FindDate(PackageDocument packageFile)
+        {
+            string? date = packageFile?.Metadata?.Date?.FirstOrDefault()?.Value;
+            if (date != null)
+                    return date;
+            date = packageFile?.Metadata?.Meta?.Find(m => string.Equals(m.Property, "dcterms:date"))?.Value;
+                    return date;
+        }
+
+        private static bool ValidatePackage(PackageDocument archive)
+        {
+
+            return !string.IsNullOrEmpty(archive.Version)
+                && archive.Metadata != null
+                && archive.Manifest != null
+                && archive.Spine != null;
+        }
+
+        private static bool ValidateMetadata(Metadata metadata)
+        {
+            return metadata.Identifier != null
+                && metadata.Title != null
+                && metadata.Language != null
+                && metadata.Meta != null;
         }
     }
 }

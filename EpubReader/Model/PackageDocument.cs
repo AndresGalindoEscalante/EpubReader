@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace EpubReader.Model
 {
     [XmlRoot("package", Namespace = "http://www.idpf.org/2007/opf")]
-    public class OpfFile
+    public class PackageDocument
     {
 
         [XmlAttribute("version")]
@@ -24,7 +24,7 @@ namespace EpubReader.Model
         public required string Id { get; set; }
 
         [XmlAttribute("prefix")]
-        public required string prefix { get; set; }
+        public required string Prefix { get; set; }
 
         [XmlAttribute("xml:lang")]
         public required string XmlLang { get; set; }
@@ -90,6 +90,9 @@ namespace EpubReader.Model
 
         [XmlElement("type", Namespace = "http://purl.org/dc/elements/1.1/")]
         public List<DcTerm>? Type { get; set; }
+
+        [XmlElement("meta")]
+        public List<Meta>? Meta { get; set; }
     }
 
     public class DcTerm
@@ -102,6 +105,20 @@ namespace EpubReader.Model
         public string? Dir { get; set; }
         [XmlAttribute("xml:lang")]
         public string? XmlLang { get; set; }
+    }
+
+    public class Meta
+    {
+        [XmlAttribute("name")]
+        public required string Name { get; set; }
+        [XmlAttribute("content")]
+        public required string Content { get; set; }
+        [XmlAttribute("property")]
+        public string? Property { get; set; }
+        [XmlAttribute("refines")]
+        public string? Refines { get; set; }
+        [XmlText]
+        public string? Value { get; set; }
     }
 
     public class Manifest

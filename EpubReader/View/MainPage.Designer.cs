@@ -31,10 +31,10 @@
             components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             AddBook = new Button();
-            panel1 = new Panel();
+            BookPanel = new Panel();
             BooksBinding = new DataGridView();
             bookControllerBindingSource = new BindingSource(components);
-            panel1.SuspendLayout();
+            BookPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)BooksBinding).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bookControllerBindingSource).BeginInit();
             SuspendLayout();
@@ -51,17 +51,18 @@
             AddBook.UseVisualStyleBackColor = true;
             AddBook.Click += AddBookButton;
             // 
-            // panel1
+            // BookPanel
             // 
-            panel1.AutoScroll = true;
-            panel1.AutoSize = true;
-            panel1.BackColor = SystemColors.Window;
-            panel1.Controls.Add(BooksBinding);
-            panel1.Location = new Point(334, 40);
-            panel1.Margin = new Padding(3, 4, 3, 4);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(2260, 976);
-            panel1.TabIndex = 3;
+            BookPanel.Anchor = AnchorStyles.None;
+            BookPanel.AutoScroll = true;
+            BookPanel.AutoSize = true;
+            BookPanel.BackColor = SystemColors.Control;
+            BookPanel.Controls.Add(BooksBinding);
+            BookPanel.Location = new Point(875, 13);
+            BookPanel.Margin = new Padding(3, 4, 3, 4);
+            BookPanel.Name = "BookPanel";
+            BookPanel.Size = new Size(3000, 1000);
+            BookPanel.TabIndex = 3;
             // 
             // BooksBinding
             // 
@@ -74,7 +75,8 @@
             BooksBinding.RowHeadersWidth = 82;
             dataGridViewCellStyle1.BackColor = Color.White;
             BooksBinding.RowsDefaultCellStyle = dataGridViewCellStyle1;
-            BooksBinding.Size = new Size(2260, 976);
+            BooksBinding.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            BooksBinding.Size = new Size(3000, 1000);
             BooksBinding.TabIndex = 4;
             // 
             // bookControllerBindingSource
@@ -86,13 +88,13 @@
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(3149, 1481);
-            Controls.Add(panel1);
+            Controls.Add(BookPanel);
             Controls.Add(AddBook);
             Margin = new Padding(3, 4, 3, 4);
             Name = "MainPage";
             Text = "Form1";
             Load += Form1_Load;
-            panel1.ResumeLayout(false);
+            BookPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)BooksBinding).EndInit();
             ((System.ComponentModel.ISupportInitialize)bookControllerBindingSource).EndInit();
             ResumeLayout(false);
@@ -103,7 +105,7 @@
         #endregion
 
         private System.Windows.Forms.Button AddBook;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel BookPanel;
         private BindingSource bookControllerBindingSource;
         private DataGridView BooksBinding;
     }
