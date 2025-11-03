@@ -17,10 +17,6 @@ namespace EpubReader.Controller
             try
             {
                 string? folderPath = ConfigurationManager.AppSettings["BookFolder"];
-                if (folderPath != null && !Directory.Exists(folderPath))
-                {
-                    Directory.CreateDirectory(folderPath);
-                }
                 using var db = new LiteDatabase($@"{folderPath}\EpubReaderData.db");
                 var books = db.GetCollection<Book>("books");
                 books.Insert(book);
@@ -58,7 +54,8 @@ namespace EpubReader.Controller
                 var books = db.GetCollection<Book>("books");
                 foreach (int id in idBook)
                 {
-                res = books.Delete(id);
+                    FileController.DeleteFromProgramDirectory(books.FindById(id)?.FilePath!);
+                    res = books.Delete(id);
                 }
             }
             catch (Exception ex)

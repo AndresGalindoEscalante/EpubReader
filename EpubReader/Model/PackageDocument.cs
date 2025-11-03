@@ -94,7 +94,6 @@ namespace EpubReader.Model
         [XmlElement("meta")]
         public List<Meta>? Meta { get; set; }
     }
-
     public class DcTerm
     {
         [XmlText]
@@ -106,7 +105,6 @@ namespace EpubReader.Model
         [XmlAttribute("xml:lang")]
         public string? XmlLang { get; set; }
     }
-
     public class Meta
     {
         [XmlAttribute("name")]
@@ -120,7 +118,6 @@ namespace EpubReader.Model
         [XmlText]
         public string? Value { get; set; }
     }
-
     public class Manifest
     {
         [XmlElement("item")]
@@ -179,7 +176,6 @@ namespace EpubReader.Model
         [XmlElement("reference")]
         public List<Reference>? References { get; set; }
     }
-
     public class Reference
     {
         [XmlAttribute("type")]
@@ -191,7 +187,6 @@ namespace EpubReader.Model
         [XmlAttribute("title")]
         public string? Title { get; set; }
     }
-
     public class Collection
     {
         [XmlAttribute("role")]
@@ -212,11 +207,9 @@ namespace EpubReader.Model
         [XmlElement("link")]
         public List<ItemRef>? Links { get; set; }
     }
-
     public class Link
     {
         [XmlAttribute("href")]
         public required string Href { get; set; }
     }
-
 }

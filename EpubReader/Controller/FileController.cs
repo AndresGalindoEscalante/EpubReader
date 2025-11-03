@@ -104,13 +104,12 @@ namespace EpubReader.Controller
                 Console.WriteLine("Invalid package file");
                 return null;
             }
+            string bookTitle = packageFile.Metadata.Title.Value;
+            string filePathNew = MoveToProgramDirectory(bookPath, bookTitle);
 
-
-
-            string filePathNew = $@"{ConfigurationManager.AppSettings["BookFolder"]}\{bookPath}";
             Book book = new()
             {
-                UniqueId = int.TryParse(packageFile.Metadata.Identifier.First().Value, out int id) ? id : 0,
+                UniqueId = packageFile.Metadata.Identifier.First().Value,
                 Name = packageFile.Metadata.Title != null ? packageFile.Metadata.Title.Value : "Unknown Title",
                 Author = packageFile.Metadata?.Creator?.Count > 0 ?
                     string.Join(", ", packageFile.Metadata.Creator.Select(c => c.Value)) : "Unknown Author",
@@ -119,6 +118,45 @@ namespace EpubReader.Controller
                 PublishDate = FindDate(packageFile) ?? "Unknown Publish Date"
             };
             return book;
+        }
+
+        private static string MoveToProgramDirectory(string bookPath, string bookTitle)
+        {
+            string filePathNew = string.Empty;
+            try
+            {
+                string? folderPath = ConfigurationManager.AppSettings["BookFolder"];
+                int count = 1;
+                while (Directory.Exists($@"{folderPath}\{bookTitle} ({count})"))
+                {
+                    count++;
+                }
+                Directory.CreateDirectory($@"{folderPath}\{bookTitle} ({count})");
+
+                filePathNew = $@"{folderPath}\{bookTitle} ({count})\{bookTitle}.epub";
+                File.Copy(bookPath!, filePathNew, true);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return filePathNew;
+        }
+
+        public static bool DeleteFromProgramDirectory(string bookPath)
+        {
+            bool res = false;
+            try
+            {
+                File.Delete($@"{bookPath}");
+                Directory.Delete(Path.GetDirectoryName(bookPath)!);
+                res = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return res;
         }
 
         private static string? FindDate(PackageDocument packageFile)
